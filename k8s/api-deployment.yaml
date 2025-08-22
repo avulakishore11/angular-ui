@@ -1,0 +1,46 @@
+## Deployment and service for the .NET API
+##
+## This manifest defines a Deployment for the ASP.NET Core API.  The
+## container image should be built from the `dotnet-api` project using
+## Cloud Native Buildpacks or another container build system.  The
+## connection string to MySQL is injected via an environment variable.
+## A ClusterIP service exposes the API on port 5000 inside the cluster.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          # Replace this image with your own image name
+          image: your-registry/your-api-image:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://0.0.0.0:5000
+            - name: ConnectionStrings__DefaultConnection
+              value: "server=mysql;port=3306;database=itemsdb;user=root;password=secret"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+spec:
+  ports:
+    - port: 5000
+      targetPort: 5000
+  selector:
+    app: api
+  type: ClusterIP

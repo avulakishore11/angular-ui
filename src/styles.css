@@ -1,0 +1,15 @@
+/* Basic global styles for the Angular application */
+body {
+  margin: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  margin-left: 8px;
+  padding: 4px 8px;
+}
+
+input {
+  padding: 4px;
+  margin-right: 4px;
+}

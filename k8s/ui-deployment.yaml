@@ -1,0 +1,44 @@
+## Deployment and service for the Angular UI
+##
+## The UI is built using Angular and served as static files from an
+## HTTP server.  The container image should expose the site on port
+## 80 (for example by using a buildpack or a custom `nginx` image).
+## This manifest defines a Deployment that runs a single replica of
+## the UI and exposes it via a LoadBalancer service so that it is
+## reachable from outside the cluster over HTTP.  No TLS/HTTPS is
+## configured because certificates are not available; the application
+## therefore runs using unencrypted HTTP.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+        - name: ui
+          # Replace this image with your own image name
+          image: your-registry/your-ui-image:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: ui

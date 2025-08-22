@@ -1,0 +1,12 @@
+/* Styles scoped to AppComponent */
+h1 {
+  color: #007acc;
+  margin-bottom: 16px;
+}
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+li {
+  margin: 8px 0;
+}
